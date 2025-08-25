@@ -3,30 +3,35 @@ import { Alert } from "react-native";
 
   const endPointURL = "https://68aad3eb909a5835049d18b7.mockapi.io/books";
 
-  const getListOfBooks = async () => {
+  export const getListOfBooks = async ({onSuccess,onError}) => {
     try {
       const response = await axios.get(endPointURL);
       console.log(response.data);
-      setBookList(response.data);
+      onSuccess && onSuccess(response.data)
     } catch (error) {
+      onError && onError(error)
       console.log(error);
     }
   };
 
-  const getBookByID = async () => {
+  export const getBookByID = async ({onSuccess,onError}) => {
     try {
       const response = await axios.get(endPointURL + "/3");
       console.log(response.data);
+      onSuccess && onSuccess(response.data)
     } catch (error) {
+      onError && onError(error)
       console.log(error);
     }
   };
 
-  const deleteBookByID = async () => {
+  export const deleteBookByID = async ({onSuccess,onError, itemID}) => {
     try {
-      const deleted = await axios.delete(`${endPointURL}/7`);
+      const deleted = await axios.delete(`${endPointURL}/${itemID}`);
       Alert.alert("Book 7 is deleted sucessfully");
+      onSuccess && onSuccess(deleted.data)
     } catch (error) {
+      onError && onError(error)
       console.log(error);
     }
   };
@@ -38,22 +43,24 @@ import { Alert } from "react-native";
     price_of_book: 100,
   };
 
-  const createBook = async () => {
+  export const createBook = async ({onSuccess,onError}) => {
     try {
       const response = await axios.post(endPointURL, body);
       Alert.alert("Book has been created");
-      getListOfBooks();
+      onSuccess && onSuccess(response.data)
     } catch (error) {
+      onError && onError(error)
       console.log(error);
     }
   };
 
-  const updateBook = async () => {
+  export const updateBook = async ({onSuccess,onError}) => {
     try {
       const response = await axios.put(`${endPointURL}/10`, body);
       Alert.alert("Book has been updated");
-      getListOfBooks();
+      onSuccess && onSuccess(response.data)
     } catch (error) {
+      onError && onError(error)
       console.log(error);
     }
   };
