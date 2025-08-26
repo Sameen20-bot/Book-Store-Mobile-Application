@@ -3,7 +3,7 @@ import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { vs, s } from "react-native-size-matters";
 import { Image } from "expo-image";
 
-const BookCard = ({ imageUri, titles, authors, prices, onDeleteItem }) => {
+const BookCard = ({ imageUri, titles, authors, prices, onDeleteItem, onEditItem }) => {
   return (
     <View style={styles.container}>
       <Image
@@ -24,7 +24,7 @@ const BookCard = ({ imageUri, titles, authors, prices, onDeleteItem }) => {
           <TouchableOpacity style={styles.circle} onPress={onDeleteItem}>
             <MaterialIcons name="delete-outline" size={20} color="red" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.circle}>
+          <TouchableOpacity style={styles.circle} onPress={onEditItem}>
             <Feather name="edit-2" size={20} color="#3338A0" />
           </TouchableOpacity>
         </View>
@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
   },
   image: {
     width: s(100),
-    height: s(100),
-    resizeMode: "contain",
-    marginRight: 10,
+    height: s(120),
+    resizeMode: "stretch",
+    marginRight: s(10),
   },
   rightSide: {
     flex: 1,

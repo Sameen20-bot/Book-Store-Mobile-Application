@@ -6,7 +6,6 @@ import { Alert } from "react-native";
   export const getListOfBooks = async ({onSuccess,onError}) => {
     try {
       const response = await axios.get(endPointURL);
-      console.log(response.data);
       onSuccess && onSuccess(response.data)
     } catch (error) {
       onError && onError(error)
@@ -17,7 +16,6 @@ import { Alert } from "react-native";
   export const getBookByID = async ({onSuccess,onError}) => {
     try {
       const response = await axios.get(endPointURL + "/3");
-      console.log(response.data);
       onSuccess && onSuccess(response.data)
     } catch (error) {
       onError && onError(error)
@@ -28,7 +26,7 @@ import { Alert } from "react-native";
   export const deleteBookByID = async ({onSuccess,onError, itemID}) => {
     try {
       const deleted = await axios.delete(`${endPointURL}/${itemID}`);
-      Alert.alert("Book 7 is deleted sucessfully");
+      Alert.alert("Book is deleted successfully");
       onSuccess && onSuccess(deleted.data)
     } catch (error) {
       onError && onError(error)
@@ -36,14 +34,7 @@ import { Alert } from "react-native";
     }
   };
 
-  const body = {
-    name_of_author: "Zaki Ahmed",
-    cover: "https://cdn.europosters.eu/image/1300/214933.jpg",
-    email_of_seller: "zaki@hotmail.com",
-    price_of_book: 100,
-  };
-
-  export const createBook = async ({onSuccess,onError}) => {
+  export const createBook = async ({body,onSuccess,onError}) => {
     try {
       const response = await axios.post(endPointURL, body);
       Alert.alert("Book has been created");
@@ -54,9 +45,9 @@ import { Alert } from "react-native";
     }
   };
 
-  export const updateBook = async ({onSuccess,onError}) => {
+  export const updateBook = async ({onSuccess,onError, ID, body}) => {
     try {
-      const response = await axios.put(`${endPointURL}/10`, body);
+      const response = await axios.put(`${endPointURL}/${ID}`, body);
       Alert.alert("Book has been updated");
       onSuccess && onSuccess(response.data)
     } catch (error) {

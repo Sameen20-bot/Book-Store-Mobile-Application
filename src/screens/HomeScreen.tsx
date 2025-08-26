@@ -1,20 +1,32 @@
-import { FlatList, Modal, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Modal,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import BookCard from "../components/BookCard";
 import { vs, s } from "react-native-size-matters";
 import { SetStateAction, useEffect, useState } from "react";
 import { deleteBookByID, getListOfBooks } from "../api/config";
 import AddButton from "../components/AddButton";
-import BookAdd from "../components/BookAdd";
+import BookAdd from "../components/BookSubmit";
 
 const HomeScreen = () => {
   const [book, setBooklist] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-  useEffect(() => {
+  const getListOfBookFn = () => {
     getListOfBooks({
       onSuccess: (books: any) => setBooklist(books),
       onError: (err: any) => console.log(err),
     });
+  };
+
+  useEffect(() => {
+    getListOfBookFn();
   }, []);
 
   const onDeleteItem = (item) => {
@@ -31,6 +43,11 @@ const HomeScreen = () => {
     });
   };
 
+  const onEditItem = (item) => {
+    setVisible(true);
+    setSelectedItem(item);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -44,12 +61,22 @@ const HomeScreen = () => {
             authors={item.name_of_author}
             prices={item.price_of_book}
             onDeleteItem={() => onDeleteItem(item)}
+            onEditItem={() => onEditItem(item)}
           />
         )}
       />
-      <AddButton onPress={()=> setVisible(true)}/>
+      <AddButton
+        onPress={() => {
+          setVisible(true);
+          setSelectedItem(null);
+        }}
+      />
       <Modal visible={visible}>
-        <BookAdd onPressClose={()=> setVisible(false)}/>
+        <BookAdd
+          onPressClose={() => setVisible(false)}
+          onCreateSuccess={() => getListOfBookFn()}
+          selectedItem={selectedItem}
+        />
       </Modal>
     </SafeAreaView>
   );
@@ -57,7 +84,7 @@ const HomeScreen = () => {
 export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: s(17),
+    paddingHorizontal: s(10),
     marginTop: vs(40),
   },
 });
